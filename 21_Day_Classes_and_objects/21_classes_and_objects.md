@@ -365,47 +365,54 @@ Overriding a parent method, which we learned above, is one way to achieve polymo
 
 ### Abstraction
 
-**Abstraction means showing what an object can do while leaving the details of how it works inside the class.**
+**Abstraction means giving someone a simple way to use something without making them handle all its internal steps.**
 
-Think of a television remote: you press a button without needing to understand its internal wiring.
+Think of a coffee machine. You press one button to make coffee. The machine handles heating the water, brewing the coffee, and pouring it.
 
-In Python, an **abstract class** can define methods that its child classes must provide. Here, every shape must have an `area()` method, but each shape decides how to calculate its area:
+Here is a complete Python example that models those steps using printed messages:
 
 ```py
-from abc import ABC, abstractmethod
+class CoffeeMachine:
+    def make_coffee(self):
+        self._heat_water()
+        self._brew_coffee()
+        self._pour_coffee()
+        print("Coffee is ready!")
+
+    def _heat_water(self):
+        print("Heating the water...")
+
+    def _brew_coffee(self):
+        print("Brewing the coffee...")
+
+    def _pour_coffee(self):
+        print("Pouring coffee into the cup...")
 
 
-class Shape(ABC):
-    @abstractmethod
-    def area(self):
-        pass
-
-
-class Rectangle(Shape):
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-    def area(self):
-        return self.width * self.height
-
-
-rectangle = Rectangle(4, 6)
-print(rectangle.area())
+machine = CoffeeMachine()
+machine.make_coffee()
 ```
 
 **Output:**
 
 ```sh
-24
+Heating the water...
+Brewing the coffee...
+Pouring coffee into the cup...
+Coffee is ready!
 ```
 
-- `ABC` lets us define an abstract base class.
-- `@abstractmethod` marks a method that a child class must implement before we can create its objects.
-- `Shape()` would raise a `TypeError` because `area()` is still abstract.
-- `Rectangle` provides `area()`, so we can create a rectangle and use it.
+The person using this class only needs to call:
 
-The caller asks for the area; the rectangle handles the calculation. Abstract classes are one tool for abstraction, but abstraction does not always require them.
+```py
+machine.make_coffee()
+```
+
+They do not need to call each step separately or remember the correct order. The `make_coffee()` method handles those details.
+
+The methods starting with `_` are internal helpers by convention. They are still accessible in Python; the caller simply does not need to use them.
+
+**That is abstraction: a simple action on the outside, with the steps handled inside.**
 
 ### Encapsulation
 
@@ -462,7 +469,7 @@ We use `deposit()` to update the balance and `get_balance()` to read it. A zero 
 
 **Private-style names are not a security feature.** The data can still be accessed using its mangled name. Use these names to communicate intent and prevent accidental mistakes, not to hide passwords or other secrets.
 
-For more detail, see Python's [private variables](https://docs.python.org/3/tutorial/classes.html#private-variables) and [abstract methods](https://docs.python.org/3/library/abc.html#abc.abstractmethod) documentation.
+For more detail, see Python's [private variables](https://docs.python.org/3/tutorial/classes.html#private-variables)..
 
 ### Quick Comparison
 
@@ -480,7 +487,7 @@ For more detail, see Python's [private variables](https://docs.python.org/3/tuto
 ### Exercises: OOP Concepts
 
 1. **Polymorphism:** Add a `Bird` class with a `speak()` method that returns `"Tweet!"`. Add a bird to the animals list and run the same loop. Expect three different sounds.
-2. **Abstraction:** Create a `Square` class that inherits from `Shape`. Give it a `side` attribute and implement `area()`. A square with side `3` should return `9`.
+2. **Abstraction:** Add an internal `_add_milk()` method to `CoffeeMachine`. Make it print `"Adding milk..."` and call it inside `make_coffee()` before pouring. The person using the class should still only call `machine.make_coffee()`.
 3. **Encapsulation:** Try depositing `0` into the bank account. Catch the `ValueError` using `try/except` and check that the balance is still `50`.
 4. **Public and private:** Change `account.owner` to another name and print it. Explain why we use `get_balance()` instead of `account.__balance`.
 
