@@ -123,13 +123,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# Next.js, local settings, and browser test output
-node_modules/
-.next/
-out/
-*.tsbuildinfo
-.env.*
-!.env.example
-test-results/
-playwright-report/

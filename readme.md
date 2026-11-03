@@ -33,8 +33,6 @@
 | 29 |  [Building API](./29_Day_Building_API/29_building_API.md)|
 | 30 |  [Conclusions](./30_Day_Conclusions/30_conclusions.md)|
 
-Days 22 and 26–29 now include a runnable [Python Learning Lab](./python_for_web/README.md): FastAPI, MongoDB, Next.js/React, and Tailwind, with offline scraping exercises and automated tests. Start with the linked setup guide.
-
 
 <small>🧡🧡🧡 HAPPY CODING 🧡🧡🧡</small>
 
