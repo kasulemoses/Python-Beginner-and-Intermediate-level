@@ -28,7 +28,13 @@
     - [Method to Modify Class Default Values](#method-to-modify-class-default-values)
     - [Inheritance](#inheritance)
     - [Overriding parent method](#overriding-parent-method)
+    - [Polymorphism](#polymorphism)
+    - [Abstraction](#abstraction)
+    - [Encapsulation](#encapsulation)
+      - [Public and Private Attributes and Methods](#public-and-private-attributes-and-methods)
+    - [Quick Comparison](#quick-comparison)
   - [💻 Exercises: Day 21](#-exercises-day-21)
+    - [Exercises: OOP Concepts](#exercises-oop-concepts)
     - [Exercises: Level 1](#exercises-level-1)
     - [Exercises: Level 2](#exercises-level-2)
     - [Exercises: Level 3](#exercises-level-3)
@@ -318,9 +324,172 @@ Lidiya Teklemariam is 28 years old. She lives in Espoo, Finland.
 
 We can use super() built-in function or the parent name Person to automatically inherit the methods and properties from its parent. In the example above we override the parent method. The child method has a different feature, it can identify, if the gender is male or female and assign the proper pronoun(He/She).
 
+### Polymorphism
+
+**Polymorphism means using the same method name with different objects, where each object can behave differently.**
+
+For example, a dog and a cat can both `speak()`, but they make different sounds:
+
+```py
+class Animal:
+    def speak(self):
+        return "An animal makes a sound"
+
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+
+animals = [Dog(), Cat()]
+
+for animal in animals:
+    print(animal.speak())
+```
+
+**Output:**
+
+```sh
+Woof!
+Meow!
+```
+
+The loop calls `speak()` in the same way for both objects. Python uses the version belonging to each object. We can add another animal without changing the loop.
+
+Overriding a parent method, which we learned above, is one way to achieve polymorphism. Python also allows unrelated classes to be used this way if they provide the needed method.
+
+### Abstraction
+
+**Abstraction means giving someone a simple way to use something without making them handle all its internal steps.**
+
+Think of a coffee machine. You press one button to make coffee. The machine handles heating the water, brewing the coffee, and pouring it.
+
+Here is a complete Python example that models those steps using printed messages:
+
+```py
+class CoffeeMachine:
+    def make_coffee(self):
+        self._heat_water()
+        self._brew_coffee()
+        self._pour_coffee()
+        print("Coffee is ready!")
+
+    def _heat_water(self):
+        print("Heating the water...")
+
+    def _brew_coffee(self):
+        print("Brewing the coffee...")
+
+    def _pour_coffee(self):
+        print("Pouring coffee into the cup...")
+
+
+machine = CoffeeMachine()
+machine.make_coffee()
+```
+
+**Output:**
+
+```sh
+Heating the water...
+Brewing the coffee...
+Pouring coffee into the cup...
+Coffee is ready!
+```
+
+The person using this class only needs to call:
+
+```py
+machine.make_coffee()
+```
+
+They do not need to call each step separately or remember the correct order. The `make_coffee()` method handles those details.
+
+The methods starting with `_` are internal helpers by convention. They are still accessible in Python; the caller simply does not need to use them.
+
+**That is abstraction: a simple action on the outside, with the steps handled inside.**
+
+### Encapsulation
+
+**Encapsulation means keeping data and the methods that work on it together in a class, and controlling how that data is changed.**
+
+For example, a bank account can provide a `deposit()` method that checks an amount before changing the balance.
+
+#### Public and Private Attributes and Methods
+
+Python uses names to communicate how attributes and methods should be used:
+
+| Name | Meaning |
+| --- | --- |
+| `owner` | **Public:** intended to be accessed directly, such as `account.owner`. |
+| `_balance` | **Non-public by convention:** intended for internal use. Python still allows direct access. |
+| `__balance` | **Private-style:** Python changes the stored name through *name mangling*, helping avoid accidental access and name clashes in child classes. |
+
+Python does not use `public` or `private` keywords for this. The same naming rules apply to methods, such as `deposit()`, `_helper()`, and `__helper()`.
+
+Here is a simple encapsulation example:
+
+```py
+class BankAccount:
+    def __init__(self, owner):
+        self.owner = owner       # Public attribute
+        self.__balance = 0       # Private-style attribute
+
+    def deposit(self, amount):
+        if amount <= 0:
+            raise ValueError("Deposit must be greater than zero")
+        self.__balance += amount
+
+    def get_balance(self):
+        return self.__balance
+
+
+account = BankAccount("Moses")
+account.deposit(50)
+
+print(account.owner)
+print(account.get_balance())
+
+# print(account.__balance)  # Raises AttributeError
+```
+
+**Output:**
+
+```sh
+Moses
+50
+```
+
+We use `deposit()` to update the balance and `get_balance()` to read it. A zero or negative deposit raises an error before the balance changes.
+
+**Private-style names are not a security feature.** The data can still be accessed using its mangled name. Use these names to communicate intent and prevent accidental mistakes, not to hide passwords or other secrets.
+
+For more detail, see Python's [private variables](https://docs.python.org/3/tutorial/classes.html#private-variables)..
+
+### Quick Comparison
+
+| Concept | Main idea |
+| --- | --- |
+| Polymorphism | The same method call can produce different behavior for different objects. |
+| Abstraction | Use a simple interface while the class handles the details. |
+| Encapsulation | Keep related data and methods together and guide how data changes. |
+| Public/private naming | Communicate which parts of a class are intended for outside or internal use. |
+
 🌕 Now, you are fully charged with a super power of programming.  Now do some exercises for your brain and muscles.
 
 ## 💻 Exercises: Day 21
+
+### Exercises: OOP Concepts
+
+1. **Polymorphism:** Add a `Bird` class with a `speak()` method that returns `"Tweet!"`. Add a bird to the animals list and run the same loop. Expect three different sounds.
+2. **Abstraction:** Add an internal `_add_milk()` method to `CoffeeMachine`. Make it print `"Adding milk..."` and call it inside `make_coffee()` before pouring. The person using the class should still only call `machine.make_coffee()`.
+3. **Encapsulation:** Try depositing `0` into the bank account. Catch the `ValueError` using `try/except` and check that the balance is still `50`.
+4. **Public and private:** Change `account.owner` to another name and print it. Explain why we use `get_balance()` instead of `account.__balance`.
 
 ### Exercises: Level 1
 
